@@ -14,6 +14,7 @@ var boxImg
 var gamestate=end
 var endImg
 var end
+var box;
 function preload() {
 oceanImg = loadImage("Ocean.jpg")
 sharkImg = loadImage("shark.png")
@@ -30,6 +31,8 @@ shark = createSprite(80,160,20,50);
 redfish = createSprite(300,200)
 goldfish = createSprite(300,300)
 fish = createSprite(300,100)
+box=createSprite(300,200);
+box.visible=false;
 shark.addImage(sharkImg)
 ocean.addImage(oceanImg)
 redfish.addImage(redfishImg)
@@ -39,6 +42,7 @@ fish.addImage(fishImg)
 //box.addImage(boxImg)
 ocean.scale=2
 shark.scale=0.25
+shark.debug=true;
 goldfish.velocityX=-4
 ocean.velocityX=-2
 redfish.velocityX=-3
@@ -51,6 +55,7 @@ fish.scale=0.2
 function draw() {
 background("white")
 drawSprites()
+var select_sprites = Math.round(random(1,4)); 
 if (frameCount % 150 == 0) 
 {
   var select_sprites = Math.round(random(1,4)); 
@@ -72,34 +77,40 @@ if (frameCount % 150 == 0)
  {
     createBox(); 
   } 
+  
 }
 if(keyDown("up")){
-  shark.y=shark.y+-5
-  }
-  if(keyDown("down")) {
-  shark.y=shark.y+5
-  }
-  text("Score:"+score,320,20)
-  if(ocean.x < 0 ){
-      ocean.x = width/2;
-    
-    }
+shark.y=shark.y+-5
+}
+if(keyDown("down")) {
+shark.y=shark.y+5
+}
+text("Score:"+score,320,20)
+if(ocean.x < 0 ){
+    ocean.x = width/2;
   
-    if(shark.isTouching(fish)) {
-      fish.destroy(shark)
-      score=score+1
-    }
-   if(shark.isTouching(redfish)) {
-     redfish.destroy(shark)
-     score=score+3
-   }
-  if(shark.isTouching(goldfish)) {
-    goldfish.destroy(shark)
-    score=score+5
   }
-  
+
+  if(shark.isTouching(fish)) {
+    fish.destroy(shark)
+    score=score+1
+  }
+ if(shark.isTouching(redfish)) {
+   redfish.destroy(shark)
+   score=score+3
+ }
+if(shark.isTouching(goldfish)) {
+  goldfish.destroy(shark)
+  score=score+5
 }
 
+if(box.isTouching(shark)) {
+  gameOver()
+  console.log("Game over")
+ // text("Click r to restart") 
+  }
+
+}//draw function ends
 
 function createFish() {
   fish=createSprite(300,100);
@@ -132,26 +143,15 @@ box.y = Math.round(random(10,400))
 box.lifetime = 200
 box.scale = 0.5
 box.velocityX=-4
+box.debug=true;
+
+
 }
+function gameOver() {
+background(0);
+text("GAME OVER!!!",150,200)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
