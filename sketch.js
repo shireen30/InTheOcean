@@ -1,3 +1,5 @@
+
+
 var shark
 var fish
 var score=0
@@ -11,10 +13,13 @@ var goldfish
 var goldfishImg
 var box
 var boxImg
-var gamestate=end
 var endImg
 var end
 var box;
+var sea_sound;
+
+
+var gameState="play";
 function preload() {
 oceanImg = loadImage("Ocean.jpg")
 sharkImg = loadImage("shark.png")
@@ -23,9 +28,11 @@ redfishImg = loadImage("redfish.png")
 goldfishImg = loadImage("goldfish.png")
 boxImg = loadImage("box.png")
 endImg = loadImage("GameOver.png")
+sea_sound = loadSound("sea_sound.mp3")
 }
 function setup() {
 createCanvas(400,400)
+if(gameState=="play"){
 ocean = createSprite(400,400,400,400)
 shark = createSprite(80,160,20,50);
 redfish = createSprite(300,200)
@@ -42,7 +49,7 @@ fish.addImage(fishImg)
 //box.addImage(boxImg)
 ocean.scale=2
 shark.scale=0.25
-shark.debug=true;
+shark.debug=false;
 goldfish.velocityX=-4
 ocean.velocityX=-2
 redfish.velocityX=-3
@@ -51,9 +58,14 @@ fish.velocityX=-2
 redfish.scale=0.2
 goldfish.scale=0.3
 fish.scale=0.2
+sea_sound.loop()
+}
 }
 function draw() {
-background("white")
+  if(gameState=="play")
+{
+  background("white")
+
 drawSprites()
 var select_sprites = Math.round(random(1,4)); 
 if (frameCount % 150 == 0) 
@@ -105,11 +117,14 @@ if(shark.isTouching(goldfish)) {
 }
 
 if(box.isTouching(shark)) {
-  gameOver()
+  gameState="end"
   console.log("Game over")
  // text("Click r to restart") 
   }
-
+}
+else if(gameState=="end"){
+  gameOver();
+}
 }//draw function ends
 
 function createFish() {
@@ -141,17 +156,21 @@ box=createSprite(300,350)
 box.addImage(boxImg)
 box.y = Math.round(random(10,400))
 box.lifetime = 200
-box.scale = 0.5
+box.scale = 0.2
 box.velocityX=-4
-box.debug=true;
+box.debug=false;
 
 
 }
 function gameOver() {
 background(0);
+textSize(30)
 text("GAME OVER!!!",150,200)
-
+score=0;
+redfish.destroy()
+fish.destroy()
+goldfish.destroy();
+shark.destroy();
+box.destroy();
+sea_sound.stop();
 }
-
-
-
